@@ -1,4 +1,5 @@
 <script>
+	export let name;
 	const randomImage = (async () => {
 var subreddits = ["TurkeyJerky", "KGBTR", "bgy", "duznamemes", "kucukinsanlaryoutube", "lanetliyorumlar", "ShitpostTC", "tamamahbapengelli", "ZargoryanGalaksisi"];
 var  subreddit  =  Math.floor(Math.random() * (subreddits.length - 0 + 1 ) + 0 )
@@ -6,7 +7,7 @@ var types = ["hot", "new", "top"];
 var  type  =  Math.floor(Math.random() * (types.length - 0 + 1 ) + 0 )
 var times = ["hour", "day", "week", "month", "year", "all"];
 var  time  =  Math.floor(Math.random() * (times.length - 0 + 1 ) + 0 )
-		const response = await fetch(`https://www.reddit.com/r/${subreddits[subreddit]}.json?sort=${types[type]}&t=${times[time]}`);
+		const response = await fetch(`https://www.reddit.com/r/${subreddits[subreddit]}.json?sort=${types[type]}&t=${times[time]}`,{ mode: 'no-cors', headers: { 'Access-Control-Allow-Origin': '*' }});
 		const data = await response.json();
 		const allowed =  data.data.children.filter(post => post.data.post_hint === 'image')
         const randompost = Math.floor(Math.random() * allowed.length)
