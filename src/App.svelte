@@ -6,7 +6,9 @@
 	onMount(async () => {
 		data = await fetch('https://a.4cdn.org/b/catalog.json', {
   headers: {
-    'Access-Control-Allow-Origin': '*'
+	"Access-Control-Allow-Origin": "http://boards.4chan.org",
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Content-Type": "application/json"
   }
 })
 .then(response => response.json())
