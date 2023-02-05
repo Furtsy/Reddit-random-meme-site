@@ -1,35 +1,38 @@
 <script>
-	import { onMount } from 'svelte';
-
-	export let name;
+	const randomImage = (async () => {
+var subreddits = ["TurkeyJerky", "KGBTR", "bgy", "duznamemes", "kucukinsanlaryoutube", "lanetliyorumlar", "ShitpostTC", "tamamahbapengelli", "ZargoryanGalaksisi"];
+var  subreddit  =  Math.floor(Math.random() * (subreddits.length - 0 + 1 ) + 0 )
+var types = ["hot", "new", "top"];
+var  type  =  Math.floor(Math.random() * (types.length - 0 + 1 ) + 0 )
+var times = ["hour", "day", "week", "month", "year", "all"];
+var  time  =  Math.floor(Math.random() * (times.length - 0 + 1 ) + 0 )
+		const response = await fetch(`https://www.reddit.com/r/${subreddits[subreddit]}.json?sort=${types[type]}&t=${times[time]}`);
+		const data = await response.json();
+		const allowed =  data.data.children.filter(post => post.data.post_hint === 'image')
+        const randompost = Math.floor(Math.random() * allowed.length)
+		return allowed[randompost]
+	})()
 	
-	onMount(async () => {
-		await fetch(`https://a.4cdn.org/b/catalog.json`,{
-    headers: {
-        'access-control-allow-methods':	'GET, OPTIONS',
-        'Access-Control-Allow-Origin':	'http://boards.4chan.org',
-		'Access-Control-Allow-Headers': '*'
-    } })
-    .then(res => res.json())
-    .then(console.log)
-    .catch(console.error);
-	})
-
-
-		let currentImage = 'https://media.discordapp.net/attachments/925397559160209438/1071548807180996749/image.png'
-	
-		function changeImage() {
-			currentImage = `za`;
+		async function changeImage() {
+			document.getElementById("myImg").src = await randomImage.data.url;
 		}
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-	<!-- svelte-ignore a11y-missing-attribute -->
-	<!-- <img src={currentImage} /> -->
+	<h1>Reddit Random Image</h1>
+
 	<br>
-	<button on:click={changeImage}>Resmi Değiştir</button>
+	{#await randomImage}
+	<p>...waiting</p>
+{:then data}
+	<!-- svelte-ignore a11y-img-redundant-alt -->
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<img on:click={() => window.location.href = data.data.url} src={data.data.url} alt="reddit img" style="display: block; margin: 0 auto;"/>
+{:catch error}
+	<p>failed to load!</p>
+{/await}
+<br><br>
+<button on:click={() => location.reload()}>New Image</button>
 </main>
 
 
