@@ -1,18 +1,18 @@
 <script>
-	import { onMount } from "svelte";
+	import { onMount } from 'svelte';
+
 	export let name;
-	let data;
 	
 	onMount(async () => {
-		data = await fetch('https://a.4cdn.org/b/catalog.json', {
-  headers: {
-	"Access-Control-Allow-Origin": "http://boards.4chan.org",
-    "Access-Control-Allow-Methods": "GET, OPTIONS",
-    "Content-Type": "application/json"
-  }
-})
-.then(response => response.json())
-console.log(data)
+		await fetch(`https://a.4cdn.org/b/catalog.json`,{
+    headers: {
+        'access-control-allow-methods':	'GET, OPTIONS',
+        'Access-Control-Allow-Origin':	'http://boards.4chan.org',
+		'Access-Control-Allow-Headers': '*'
+    } })
+    .then(res => res.json())
+    .then(console.log)
+    .catch(console.error);
 	})
 
 
@@ -23,20 +23,6 @@ console.log(data)
 		}
 </script>
 
-
-<script context="module">
-	export async function load({ fetch }) {
-	  const res = await fetch('https://a.4cdn.org/b/catalog.json');
-	  const articles = await res.json() ;
-	  console.log(articles)
-	if (res.ok) return { props: { articles: articles } };
-	return {
-	  status: res.status,
-	  error: new Error()
-	 };
-	}
-  </script>
-
 <main>
 	<h1>Hello {name}!</h1>
 	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
@@ -44,9 +30,6 @@ console.log(data)
 	<!-- <img src={currentImage} /> -->
 	<br>
 	<button on:click={changeImage}>Resmi Değiştir</button>
-	<pre>
-		{JSON.stringify(data, null, 2)}
-	</pre>
 </main>
 
 
