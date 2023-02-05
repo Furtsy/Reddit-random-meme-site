@@ -4,7 +4,11 @@
 	let data;
 	
 	onMount(async () => {
-		data = await fetch('https://a.4cdn.org/b/catalog.json')
+		data = await fetch('https://a.4cdn.org/b/catalog.json', {
+  headers: {
+    'Access-Control-Allow-Origin': '*'
+  }
+})
 .then(response => response.json())
 console.log(data)
 	})
